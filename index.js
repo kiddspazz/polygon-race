@@ -1,17 +1,7 @@
 export const renderPolygonRaceInElement = (parentContainerId) => {
   const HEIGHT = 900;
   const WIDTH = 1200;
-
-  let canvas = document.createElement('canvas');
-  canvas.width = WIDTH;
-  canvas.height = HEIGHT;
-  let ctx = canvas.getContext('2d');
-
-  const parentContainer = document.getElementById(parentContainerId);
-  parentContainer.append(canvas);
-
-  const c = {x: WIDTH/2, y: HEIGHT/2};
-  const colors = [
+  const COLORS = [
     'rgb(255, 0, 0)',
     'rgb(255, 127, 0)',
     'rgb(255, 255, 0)',
@@ -20,21 +10,27 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     'rgb(0, 0, 255)',
     'rgb(127, 0, 255)'
   ];
-  const steps = 12;
 
-  //turn it into a cartesian coordinate grid
-  ctx.translate(0, HEIGHT);
-  ctx.scale(1, -1);
+  let canvas = document.createElement('canvas');
+  canvas.width = WIDTH;
+  canvas.height = HEIGHT;
+
+  addCanvasToElement(canvas, parentContainerId);
+
+  cartesianCtx = getCartesianContext(canvas);
+
+  const c = {x: WIDTH/2, y: HEIGHT/2};
+  const steps = 12;
 
   let u = 80;
   let circum = 2 * Math.PI
   let step = 0;
-  ctx.lineWidth = 3;
+  cartesianCtx.lineWidth = 3;
 
   let polygons = new Array(16).fill(0);
 
   function tick() {
-    ctx.clearRect(0,0,WIDTH,HEIGHT);
+    cartesianCtx.clearRect(0,0,WIDTH,HEIGHT);
     polygons.forEach(function(e, idx, a) {
       if (!(idx < 3)) {
         draw(idx);
@@ -69,14 +65,14 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   }
 
   function draw(sides) {
-    ctx.beginPath();
+    cartesianCtx.beginPath();
     for (let i = 0; i <= sides; i ++) {
       let x = c.x + findX(i, sides) * sides/3;
       let y = c.y + findY(i, sides) * sides/3;
-      ctx.lineTo(x, y);
+      cartesianCtx.lineTo(x, y);
     };
-    ctx.strokeStyle = colors[(sides)%colors.length] //(sides+cycle)%colors.length
-    ctx.stroke();
+    cartesianCtx.strokeStyle = COLORS[(sides)%COLORS.length] //(sides+cycle)%COLORS.length
+    cartesianCtx.stroke();
 
   };
 
@@ -94,11 +90,23 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     if (sides === 3) {
     };
     let between = betweenPoint(a, b, step);
-    ctx.beginPath();
-    ctx.arc(between[0], between[1], 7, 0, circum);
-    ctx.fillStyle = 'rgb(255,255,255)';
-    ctx.fill();
+    cartesianCtx.beginPath();
+    cartesianCtx.arc(between[0], between[1], 7, 0, circum);
+    cartesianCtx.fillStyle = 'rgb(255,255,255)';
+    cartesianCtx.fill();
   }
 
   window.requestAnimationFrame(tick);
 }
+
+addCanvasToElement = (canvas, elementId) => {
+  const parentContainer = document.getElementById(elementId);
+  parentContainer.append(canvas);
+};
+
+getCartesianContext = (canvas) => {
+  let ctx = canvas.getContext('2d');
+  ctx.translate(0, canvas.height);
+  ctx.scale(1, -1);
+  return ctx;
+};
