@@ -16,7 +16,7 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     width: 1200,
     parentContainerId: parentContainerId,
   };
-  const CENTER = {x: canvasConfig.width/2, y: canvasConfig.height/2};
+  const centerPoint = {x: canvasConfig.width/2, y: canvasConfig.height/2};
   const maxSteps = 12;
 
   const cartesianCtx = setUpCanvasContext(canvasConfig)
@@ -56,8 +56,8 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   function draw(sides) {
     cartesianCtx.beginPath();
     for (let i = 0; i <= sides; i ++) {
-      let x = CENTER.x + findX(i, sides) * sides/3;
-      let y = CENTER.y + findY(i, sides) * sides/3;
+      let x = centerPoint.x + findX(i, sides) * sides/3;
+      let y = centerPoint.y + findY(i, sides) * sides/3;
       cartesianCtx.lineTo(x, y);
     };
     cartesianCtx.strokeStyle = COLORS[(sides)%COLORS.length] //(sides+cycle)%COLORS.length
@@ -81,12 +81,12 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     let thisSideStart = Math.floor(e);
     let thisSideEnd = thisSideStart + 1;
     let a = [
-      CENTER.x + findX(thisSideStart, sides) * sides/3,
-      CENTER.y + findY(thisSideStart, sides) * sides/3
+      centerPoint.x + findX(thisSideStart, sides) * sides/3,
+      centerPoint.y + findY(thisSideStart, sides) * sides/3
     ];
     let b = [
-      CENTER.x + findX(thisSideEnd, sides) * sides/3,
-      CENTER.y + findY(thisSideEnd, sides) * sides/3
+      centerPoint.x + findX(thisSideEnd, sides) * sides/3,
+      centerPoint.y + findY(thisSideEnd, sides) * sides/3
     ];
     if (sides === 3) {
     };
