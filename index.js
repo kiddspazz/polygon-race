@@ -1,16 +1,16 @@
 export const renderPolygonRaceInElement = (parentContainerId) => {
-  const H = 900;
-  const W = 1200;
+  const HEIGHT = 900;
+  const WIDTH = 1200;
 
   let canvas = document.createElement('canvas');
-  canvas.width = W;
-  canvas.height = H;
+  canvas.width = WIDTH;
+  canvas.height = HEIGHT;
   let ctx = canvas.getContext('2d');
 
   const parentContainer = document.getElementById(parentContainerId);
   parentContainer.append(canvas);
 
-  const c = {x: W/2, y: H/2};
+  const c = {x: WIDTH/2, y: HEIGHT/2};
   const colors = [
     'rgb(255, 0, 0)',
     'rgb(255, 127, 0)',
@@ -23,7 +23,7 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   const steps = 12;
 
   //turn it into a cartesian coordinate grid
-  ctx.translate(0, H);
+  ctx.translate(0, HEIGHT);
   ctx.scale(1, -1);
 
   let u = 80;
@@ -34,7 +34,7 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   let polygons = new Array(16).fill(0);
 
   function tick() {
-    ctx.clearRect(0,0,W,H);
+    ctx.clearRect(0,0,WIDTH,HEIGHT);
     polygons.forEach(function(e, idx, a) {
       if (!(idx < 3)) {
         draw(idx);
@@ -59,10 +59,6 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     let answer = Math.round(100000 * Math.cos(mult * Math.PI))/100000;
     return answer * u;
   };
-
-  function distance(a, b) {
-    return (Math.sqrt(Math.pow((b[0] - a[0]), 2) + Math.pow((b[1] + a[1]), 2)));
-  }
 
   function betweenPoint(a, b, step) {
     let d = step/steps
