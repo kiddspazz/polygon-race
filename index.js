@@ -1,7 +1,9 @@
 export const renderPolygonRaceInElement = (parentContainerId) => {
-  const HEIGHT = 900;
-  const WIDTH = 1200;
-  const CENTER = {x: WIDTH/2, y: HEIGHT/2};
+  const canvasConfig = {
+    height: 900,
+    width: 1200,
+  };
+  const CENTER = {x: canvasConfig.width/2, y: canvasConfig.height/2};
   const COLORS = [
     'rgb(255, 0, 0)',
     'rgb(255, 127, 0)',
@@ -15,8 +17,8 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   const maxSteps = 12;
 
   let canvas = document.createElement('canvas');
-  canvas.width = WIDTH;
-  canvas.height = HEIGHT;
+  canvas.width = canvasConfig.width;
+  canvas.height = canvasConfig.height;
 
   addCanvasToElement(canvas, parentContainerId);
   cartesianCtx = getCartesianContext(canvas);
@@ -28,7 +30,7 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   let polygons = new Array(16).fill(0);
 
   function tick() {
-    cartesianCtx.clearRect(0,0,WIDTH,HEIGHT);
+    cartesianCtx.clearRect(0,0,canvasConfig.width,canvasConfig.height);
     polygons.forEach(function(e, idx, a) {
       if (!(idx < 3)) {
         draw(idx);
