@@ -27,8 +27,8 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   let polygons = new Array(16).fill(0);
 
   function tick() {
-    cartesianCtx.clearRect(0,0,canvasConfig.width,canvasConfig.height);
-    polygons.forEach(function(e, idx, a) {
+    clearScreen()
+    polygons.forEach((e, idx, a) => {
       if (!(idx < 3)) {
         draw(idx);
         drawDot(e/maxSteps, idx, currentStep);
@@ -41,16 +41,8 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     window.requestAnimationFrame(tick);
   };
 
-  function findX(i, sides) {
-    let mult = (2 * i/sides)
-    let answer = Math.round(100000 * Math.sin(mult * Math.PI))/100000;
-    return answer * u;
-  };
-
-  function findY(i, sides) {
-    let mult = (2 * i/sides);
-    let answer = Math.round(100000 * Math.cos(mult * Math.PI))/100000;
-    return answer * u;
+  const clearScreen = () => {
+    cartesianCtx.clearRect(0, 0, canvasConfig.width, canvasConfig.height);
   };
 
   function betweenPoint(a, b, currentStep) {
@@ -71,6 +63,18 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     cartesianCtx.strokeStyle = COLORS[(sides)%COLORS.length] //(sides+cycle)%COLORS.length
     cartesianCtx.stroke();
 
+  };
+
+  function findX(i, sides) {
+    let mult = (2 * i/sides)
+    let answer = Math.round(100000 * Math.sin(mult * Math.PI))/100000;
+    return answer * u;
+  };
+
+  function findY(i, sides) {
+    let mult = (2 * i/sides);
+    let answer = Math.round(100000 * Math.cos(mult * Math.PI))/100000;
+    return answer * u;
   };
 
   function drawDot(e, sides, currentStep) {
