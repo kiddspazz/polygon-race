@@ -11,6 +11,7 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     'rgb(0, 0, 255)',
     'rgb(127, 0, 255)'
   ];
+  const maxSteps = 12;
 
   let canvas = document.createElement('canvas');
   canvas.width = WIDTH;
@@ -19,11 +20,10 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   addCanvasToElement(canvas, parentContainerId);
   cartesianCtx = getCartesianContext(canvas);
 
-  const steps = 12;
 
   let u = 80;
   let circum = 2 * Math.PI
-  let step = 0;
+  let currentStep = 0;
   cartesianCtx.lineWidth = 3;
 
   let polygons = new Array(16).fill(0);
@@ -33,13 +33,13 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     polygons.forEach(function(e, idx, a) {
       if (!(idx < 3)) {
         draw(idx);
-        drawDot(e/steps, idx, step);
+        drawDot(e/maxSteps, idx, currentStep);
         a[idx] ++;
-        if (a[idx] === idx * steps) {a[idx] = 0}
+        if (a[idx] === idx * maxSteps) {a[idx] = 0}
       }
     })
-    step ++;
-    if (step === steps) {step = 0}
+    currentStep ++;
+    if (currentStep === maxSteps) {currentStep = 0}
     window.requestAnimationFrame(tick);
   };
 
@@ -55,8 +55,8 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     return answer * u;
   };
 
-  function betweenPoint(a, b, step) {
-    let d = step/steps
+  function betweenPoint(a, b, currentStep) {
+    let d = currentStep/maxSteps
     let between = [];
     between[0] = a[0] + d * (b[0] - a[0]);
     between[1] = a[1] + d * (b[1] - a[1]);
@@ -75,7 +75,7 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
 
   };
 
-  function drawDot(e, sides, step) {
+  function drawDot(e, sides, currentStep) {
     let thisSideStart = Math.floor(e);
     let thisSideEnd = thisSideStart + 1;
     let a = [
@@ -88,7 +88,7 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     ];
     if (sides === 3) {
     };
-    let between = betweenPoint(a, b, step);
+    let between = betweenPoint(a, b, currentStep);
     cartesianCtx.beginPath();
     cartesianCtx.arc(between[0], between[1], 7, 0, circum);
     cartesianCtx.fillStyle = 'rgb(255,255,255)';
