@@ -1,31 +1,28 @@
+const COLORS = [
+  'rgb(255, 0, 0)',
+  'rgb(255, 127, 0)',
+  'rgb(255, 255, 0)',
+  'rgb(0, 255, 0)',
+  'rgb(0, 255, 255)',
+  'rgb(0, 0, 255)',
+  'rgb(127, 0, 255)'
+];
+
+const CIRCUM = 2 * Math.PI;
+
 export const renderPolygonRaceInElement = (parentContainerId) => {
   const canvasConfig = {
     height: 900,
     width: 1200,
+    parentContainerId: parentContainerId,
   };
   const CENTER = {x: canvasConfig.width/2, y: canvasConfig.height/2};
-  const COLORS = [
-    'rgb(255, 0, 0)',
-    'rgb(255, 127, 0)',
-    'rgb(255, 255, 0)',
-    'rgb(0, 255, 0)',
-    'rgb(0, 255, 255)',
-    'rgb(0, 0, 255)',
-    'rgb(127, 0, 255)'
-  ];
-  const CIRCUM = 2 * Math.PI
   const maxSteps = 12;
 
-  let canvas = document.createElement('canvas');
-  canvas.width = canvasConfig.width;
-  canvas.height = canvasConfig.height;
-
-  addCanvasToElement(canvas, parentContainerId);
-  cartesianCtx = getCartesianContext(canvas);
+  const cartesianCtx = setUpCanvasContext(canvasConfig)
 
   let u = 80;
   let currentStep = 0;
-  cartesianCtx.lineWidth = 3;
 
   let polygons = new Array(16).fill(0);
 
@@ -99,12 +96,23 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   window.requestAnimationFrame(tick);
 }
 
-addCanvasToElement = (canvas, elementId) => {
+const setUpCanvasContext = (config) => {
+  let canvas = document.createElement('canvas');
+  canvas.width = config.width;
+  canvas.height = config.height;
+
+  addCanvasToElement(canvas, config.parentContainerId);
+  const cartesianCtx = getCartesianContext(canvas);
+  cartesianCtx.lineWidth = 3;
+  return cartesianCtx;
+};
+
+const addCanvasToElement = (canvas, elementId) => {
   const parentContainer = document.getElementById(elementId);
   parentContainer.append(canvas);
 };
 
-getCartesianContext = (canvas) => {
+const getCartesianContext = (canvas) => {
   let ctx = canvas.getContext('2d');
   ctx.translate(0, canvas.height);
   ctx.scale(1, -1);
