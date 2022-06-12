@@ -11,6 +11,7 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     'rgb(0, 0, 255)',
     'rgb(127, 0, 255)'
   ];
+  const CIRCUM = 2 * Math.PI
   const maxSteps = 12;
 
   let canvas = document.createElement('canvas');
@@ -20,9 +21,7 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   addCanvasToElement(canvas, parentContainerId);
   cartesianCtx = getCartesianContext(canvas);
 
-
   let u = 80;
-  let circum = 2 * Math.PI
   let currentStep = 0;
   cartesianCtx.lineWidth = 3;
 
@@ -90,7 +89,7 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     };
     let between = betweenPoint(a, b, currentStep);
     cartesianCtx.beginPath();
-    cartesianCtx.arc(between[0], between[1], 7, 0, circum);
+    cartesianCtx.arc(between[0], between[1], 7, 0, CIRCUM);
     cartesianCtx.fillStyle = 'rgb(255,255,255)';
     cartesianCtx.fill();
   }
