@@ -15,7 +15,6 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     width: 1200,
     parentContainerId: parentContainerId,
   };
-  const CENTER = {x: canvasConfig.width/2, y: canvasConfig.height/2};
   const maxSteps = 12;
 
   const cartesianCtx = setUpCanvasContext(canvasConfig)
@@ -45,7 +44,12 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   };
 
   const clearScreen = () => {
-    cartesianCtx.clearRect(0, 0, canvasConfig.width, canvasConfig.height);
+    cartesianCtx.clearRect(
+      -canvasConfig.width/2,
+      -canvasConfig.height/2,
+      canvasConfig.width,
+      canvasConfig.height,
+    );
   };
 
   const drawPolygon = (numberOfSides) => {
@@ -65,15 +69,15 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   };
 
   const findX = (currentSide, numberOfSides) => {
-    let mult = 2 * currentSide/numberOfSides
-    let answer = Math.sin(mult * Math.PI)
-    return CENTER.x + (answer * sideLength * numberOfSides);
+    let mult = 2 * currentSide/numberOfSides;
+    let unitAnswer = Math.sin(mult * Math.PI);
+    return (unitAnswer * sideLength * numberOfSides);
   };
 
   const findY = (currentSide, numberOfSides) => {
     let mult = 2 * currentSide/numberOfSides;
-    let answer = Math.cos(mult * Math.PI);
-    return CENTER.y + (answer * sideLength * numberOfSides);
+    let unitAnswer = Math.cos(mult * Math.PI);
+    return (unitAnswer * sideLength * numberOfSides);
   };
 
   const drawDot = (e, sides, currentStep) => {
@@ -125,7 +129,7 @@ const addCanvasToElement = (canvas, elementId) => {
 
 const getCartesianContext = (canvas) => {
   let ctx = canvas.getContext('2d');
-  ctx.translate(0, canvas.height);
+  ctx.translate(canvas.width/2, canvas.height/2);
   ctx.scale(1, -1);
   return ctx;
 };
