@@ -52,12 +52,16 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   function drawPolygon(numberOfSides) {
     cartesianCtx.beginPath();
     for (let currentSide = 0; currentSide <= numberOfSides; currentSide ++) {
-      let x = findX(currentSide, numberOfSides);
-      let y = findY(currentSide, numberOfSides);
-      cartesianCtx.lineTo(x, y);
+      addSideToPath(currentSide, numberOfSides);
     };
     cartesianCtx.strokeStyle = COLORS[(numberOfSides)%COLORS.length]
     cartesianCtx.stroke();
+  };
+
+  const addSideToPath = (currentSide, numberOfSides) => {
+    let startPointOfSide = findX(currentSide, numberOfSides);
+    let endPointOfSide = findY(currentSide, numberOfSides);
+    cartesianCtx.lineTo(startPointOfSide, endPointOfSide);
   };
 
   function findX(i, sides) {
