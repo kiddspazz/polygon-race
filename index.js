@@ -20,7 +20,7 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
 
   const cartesianCtx = setUpCanvasContext(canvasConfig)
 
-  let sideLength = 80;
+  let sideLength = 29;
   let currentStep = 0;
 
   let polygons = new Array(16).fill(0);
@@ -67,13 +67,13 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   const findX = (currentSide, numberOfSides) => {
     let mult = 2 * currentSide/numberOfSides
     let answer = Math.sin(mult * Math.PI)
-    return CENTER.x + (answer * sideLength * numberOfSides/3);
+    return CENTER.x + (answer * sideLength * numberOfSides);
   };
 
   const findY = (currentSide, numberOfSides) => {
     let mult = 2 * currentSide/numberOfSides;
     let answer = Math.cos(mult * Math.PI);
-    return CENTER.y + (answer * sideLength * numberOfSides/3);
+    return CENTER.y + (answer * sideLength * numberOfSides);
   };
 
   const drawDot = (e, sides, currentStep) => {
