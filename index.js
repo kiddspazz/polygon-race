@@ -65,34 +65,28 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   };
 
   const addSideToPath = (currentSide, numberOfSides) => {
-    let startPointOfSide = findX(currentSide, numberOfSides);
-    let endPointOfSide = findY(currentSide, numberOfSides);
-    cartesianCtx.lineTo(startPointOfSide, endPointOfSide);
+    let point = getPoint(currentSide, numberOfSides);
+    cartesianCtx.lineTo(point.x, point.y);
   };
 
-  const findX = (currentSide, numberOfSides) => {
-    let mult = 2 * currentSide/numberOfSides;
-    let unitAnswer = Math.sin(mult * Math.PI);
-    return (unitAnswer * sideLength * numberOfSides);
-  };
+  const getPoint = (currentSide, numberOfSides) => {
+    const howFarAroundTheCircle = 2 * currentSide/numberOfSides;
+    const unitCircleX = Math.sin(howFarAroundTheCircle * Math.PI);
+    const sameDiameterCircleX = unitCircleX * sideLength;
+    const sizedByNumberOfSidesCircleX = sameDiameterCircleX * numberOfSides;
 
-  const findY = (currentSide, numberOfSides) => {
-    let mult = 2 * currentSide/numberOfSides;
-    let unitAnswer = Math.cos(mult * Math.PI);
-    return (unitAnswer * sideLength * numberOfSides);
+    const unitCircleY = Math.cos(howFarAroundTheCircle * Math.PI);
+    const sameDiameterCircleY = unitCircleY * sideLength;
+    const sizedByNumberOfSidesCircleY = sameDiameterCircleY * numberOfSides;
+
+    return {x: sizedByNumberOfSidesCircleX, y: sizedByNumberOfSidesCircleY};
   };
 
   const drawDot = (e, sides, currentStep) => {
     let thisSideStart = Math.floor(e);
     let thisSideEnd = thisSideStart + 1;
-    let a = [
-      findX(thisSideStart, sides),
-      findY(thisSideStart, sides)
-    ];
-    let b = [
-      findX(thisSideEnd, sides),
-      findY(thisSideEnd, sides)
-    ];
+    let a = getPoint(thisSideStart, sides)
+    let b = getPoint(thisSideEnd, sides)
     if (sides === 3) {
     };
     let between = betweenPoint(a, b, currentStep);
@@ -105,8 +99,8 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   const betweenPoint = (a, b, currentStep) => {
     let d = currentStep/maxSteps
     let between = [];
-    between[0] = a[0] + d * (b[0] - a[0]);
-    between[1] = a[1] + d * (b[1] - a[1]);
+    between[0] = a.x + d * (b.x - a.x);
+    between[1] = a.y + d * (b.y - a.y);
     return between;
   }
 
