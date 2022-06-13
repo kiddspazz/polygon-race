@@ -9,6 +9,7 @@ const COLORS = [
 ];
 const WHITE = 'rgb(255, 255, 255)';
 const CIRCUM = 2 * Math.PI;
+const SIDE_LENGTH = 29;
 
 export const renderPolygonRaceInElement = (parentContainerId) => {
   const canvasConfig = {
@@ -18,7 +19,6 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   };
   const maxSteps = 12;
   const cartesianCtx = setUpCanvasContext(canvasConfig);
-  const sideLength = 29;
 
   const polygons = [];
   for (let numberOfSides = 3; numberOfSides < 16; numberOfSides++) {
@@ -34,7 +34,7 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     clearScreen(cartesianCtx, canvasConfig);
 
     polygons.forEach(polygon => {
-      drawPolygon(polygon.numberOfSides);
+      drawPolygon(polygon.numberOfSides, cartesianCtx);
       drawDot(polygon, currentStep);
     });
 
@@ -51,15 +51,6 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     window.requestAnimationFrame(tick);
   };
 
-  const drawPolygon = (numberOfSides) => {
-    cartesianCtx.strokeStyle = COLORS[numberOfSides % COLORS.length]
-    cartesianCtx.beginPath();
-    for (let currentSide = 0; currentSide <= numberOfSides; currentSide ++) {
-      addSideToDrawPath(currentSide, numberOfSides);
-    };
-    cartesianCtx.stroke();
-  };
-
   const drawDot = (polygon, currentStep) => {
     const startPoint = getPoint(polygon.currentSide, polygon.numberOfSides)
     const endPoint = getPoint(polygon.currentSide + 1, polygon.numberOfSides)
@@ -69,25 +60,6 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     cartesianCtx.fillStyle = WHITE;
     cartesianCtx.fill();
   }
-
-  const addSideToDrawPath = (currentSide, numberOfSides) => {
-    const point = getPoint(currentSide, numberOfSides);
-    cartesianCtx.lineTo(point.x, point.y);
-  };
-
-  const getPoint = (currentSide, numberOfSides) => {
-    const howFarAroundTheCircle = 2 * currentSide/numberOfSides;
-
-    const unitCircleX = Math.sin(howFarAroundTheCircle * Math.PI);
-    const sideLengthDiameterCircleX = unitCircleX * sideLength;
-    const sizedByNumberOfSidesCircleX = sideLengthDiameterCircleX * numberOfSides;
-
-    const unitCircleY = Math.cos(howFarAroundTheCircle * Math.PI);
-    const sideLengthDiameterCircleY = unitCircleY * sideLength;
-    const sizedByNumberOfSidesCircleY = sideLengthDiameterCircleY * numberOfSides;
-
-    return {x: sizedByNumberOfSidesCircleX, y: sizedByNumberOfSidesCircleY};
-  };
 
   const getBetweenPoint = (a, b, currentStep) => {
     let distanceAlongLine = (currentStep - 1)/maxSteps
@@ -131,4 +103,32 @@ const clearScreen = (context, config) => {
     config.width,
     config.height,
   );
+};
+
+const drawPolygon = (numberOfSides, context) => {
+  context.strokeStyle = COLORS[numberOfSides % COLORS.length]
+  context.beginPath();
+  for (let currentSide = 0; currentSide <= numberOfSides; currentSide ++) {
+    addSideToDrawPath(currentSide, numberOfSides, context);
+  };
+  context.stroke();
+};
+
+const addSideToDrawPath = (currentSide, numberOfSides, context) => {
+  const point = getPoint(currentSide, numberOfSides);
+  context.lineTo(point.x, point.y);
+};
+
+const getPoint = (currentSide, numberOfSides) => {
+  const howFarAroundTheCircle = 2 * currentSide/numberOfSides;
+
+  const unitCircleX = Math.sin(howFarAroundTheCircle * Math.PI);
+  const sideLengthDiameterCircleX = unitCircleX * SIDE_LENGTH;
+  const sizedByNumberOfSidesCircleX = sideLengthDiameterCircleX * numberOfSides;
+
+  const unitCircleY = Math.cos(howFarAroundTheCircle * Math.PI);
+  const sideLengthDiameterCircleY = unitCircleY * SIDE_LENGTH;
+  const sizedByNumberOfSidesCircleY = sideLengthDiameterCircleY * numberOfSides;
+
+  return {x: sizedByNumberOfSidesCircleX, y: sizedByNumberOfSidesCircleY};
 };
