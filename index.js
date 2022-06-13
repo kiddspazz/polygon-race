@@ -50,11 +50,12 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   };
 
   const drawPolygon = (numberOfSides) => {
+    cartesianCtx.strokeStyle = COLORS[(numberOfSides)%COLORS.length]
+
     cartesianCtx.beginPath();
     for (let currentSide = 0; currentSide <= numberOfSides; currentSide ++) {
       addSideToPath(currentSide, numberOfSides);
     };
-    cartesianCtx.strokeStyle = COLORS[(numberOfSides)%COLORS.length]
     cartesianCtx.stroke();
   };
 
@@ -66,13 +67,13 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
 
   const findX = (i, sides) => {
     let mult = (2 * i/sides)
-    let answer = Math.round(100000 * Math.sin(mult * Math.PI))/100000;
+    let answer = Math.sin(mult * Math.PI)
     return CENTER.x + (answer * sideLength * sides/3);
   };
 
   const findY = (i, sides) => {
     let mult = (2 * i/sides);
-    let answer = Math.round(100000 * Math.cos(mult * Math.PI))/100000;
+    let answer = Math.cos(mult * Math.PI);
     return CENTER.y + (answer * sideLength * sides/3);
   };
 
