@@ -62,7 +62,6 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
 
   const drawPolygon = (numberOfSides) => {
     cartesianCtx.strokeStyle = COLORS[numberOfSides % COLORS.length]
-
     cartesianCtx.beginPath();
     for (let currentSide = 0; currentSide <= numberOfSides; currentSide ++) {
       addSideToPath(currentSide, numberOfSides);
@@ -73,7 +72,7 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   const drawDot = (currentSide, numberOfSides, currentStep) => {
     const startPoint = getPoint(currentSide, numberOfSides)
     const endPoint = getPoint(currentSide + 1, numberOfSides)
-    const dotPoint = betweenPoint(startPoint, endPoint, currentStep);
+    const dotPoint = getBetweenPoint(startPoint, endPoint, currentStep);
     cartesianCtx.beginPath();
     cartesianCtx.arc(dotPoint.x, dotPoint.y, 7, 0, CIRCUM);
     cartesianCtx.fillStyle = WHITE;
@@ -98,11 +97,12 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     return {x: sizedByNumberOfSidesCircleX, y: sizedByNumberOfSidesCircleY};
   };
 
-  const betweenPoint = (a, b, steps) => {
+  const getBetweenPoint = (a, b, steps) => {
     let distanceAlongLine = (steps - 1)/maxSteps
-    let between = {};
-    between.x = a.x + distanceAlongLine * (b.x - a.x);
-    between.y = a.y + distanceAlongLine * (b.y - a.y);
+    let between = {
+      x: a.x + distanceAlongLine * (b.x - a.x),
+      y: a.y + distanceAlongLine * (b.y - a.y),
+    };
     return between;
   }
 
