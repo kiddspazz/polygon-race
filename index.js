@@ -28,12 +28,14 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     clearScreen()
 
     // TODO: Make this cleaner
-    polygons.forEach((e, idx, a) => {
-      if (!(idx < 3)) {
-        drawPolygon(idx);
-        drawDot(e/maxSteps, idx, currentStep);
-        a[idx] ++;
-        if (a[idx] === idx * maxSteps) {a[idx] = 0}
+    polygons.forEach((e, numberOfSides) => {
+      if (!(numberOfSides < 3)) {
+        drawPolygon(numberOfSides);
+        drawDot(e/maxSteps, numberOfSides, currentStep);
+        polygons[numberOfSides] ++;
+        if (polygons[numberOfSides] === numberOfSides * maxSteps) {
+          polygons[numberOfSides] = 0;
+        }
       }
     })
 
