@@ -64,7 +64,7 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     cartesianCtx.strokeStyle = COLORS[numberOfSides % COLORS.length]
     cartesianCtx.beginPath();
     for (let currentSide = 0; currentSide <= numberOfSides; currentSide ++) {
-      addSideToPath(currentSide, numberOfSides);
+      addSideToDrawPath(currentSide, numberOfSides);
     };
     cartesianCtx.stroke();
   };
@@ -79,7 +79,7 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     cartesianCtx.fill();
   }
 
-  const addSideToPath = (currentSide, numberOfSides) => {
+  const addSideToDrawPath = (currentSide, numberOfSides) => {
     const point = getPoint(currentSide, numberOfSides);
     cartesianCtx.lineTo(point.x, point.y);
   };
