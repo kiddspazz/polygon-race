@@ -87,8 +87,6 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     let thisSideEnd = thisSideStart + 1;
     let a = getPoint(thisSideStart, sides)
     let b = getPoint(thisSideEnd, sides)
-    if (sides === 3) {
-    };
     let between = betweenPoint(a, b, currentStep);
     cartesianCtx.beginPath();
     cartesianCtx.arc(between[0], between[1], 7, 0, CIRCUM);
