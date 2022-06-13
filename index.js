@@ -7,6 +7,7 @@ const COLORS = [
   'rgb(0, 0, 255)',
   'rgb(127, 0, 255)'
 ];
+const WHITE = 'rgb(255, 255, 255)';
 const CIRCUM = 2 * Math.PI;
 
 export const renderPolygonRaceInElement = (parentContainerId) => {
@@ -77,7 +78,7 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     const between = betweenPoint(a, b, currentStep);
     cartesianCtx.beginPath();
     cartesianCtx.arc(between.x, between.y, 7, 0, CIRCUM);
-    cartesianCtx.fillStyle = 'rgb(255,255,255)';
+    cartesianCtx.fillStyle = WHITE;
     cartesianCtx.fill();
   }
 
