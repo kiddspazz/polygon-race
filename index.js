@@ -16,11 +16,8 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     parentContainerId: parentContainerId,
   };
   const maxSteps = 12;
-
-  const cartesianCtx = setUpCanvasContext(canvasConfig)
-
-  let sideLength = 29;
-  let currentStep = 0;
+  const cartesianCtx = setUpCanvasContext(canvasConfig);
+  const sideLength = 29;
 
   const polygons = [];
   for (let numberOfSides = 3; numberOfSides < 16; numberOfSides++) {
@@ -30,24 +27,27 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     });
   }
 
+  let currentStep = 1;
+
   const tick = () => {
-    clearScreen()
+    clearScreen();
 
     polygons.forEach(polygon => {
       drawPolygon(polygon.numberOfSides);
       drawDot(polygon.currentSide, polygon.numberOfSides, currentStep);
     });
 
-    if (currentStep + 1 === maxSteps) {
+    if (currentStep === maxSteps) {
       polygons.forEach(polygon => {
         polygon.currentSide ++;
       });
     }
 
-    currentStep + 1 < maxSteps
+    currentStep < maxSteps
       ? currentStep ++
-      : currentStep = 0;
-    window.requestAnimationFrame(tick)
+      : currentStep = 1;
+
+    window.requestAnimationFrame(tick);
   };
 
   const clearScreen = () => {
@@ -100,7 +100,7 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   };
 
   const betweenPoint = (a, b, currentStep) => {
-    let d = currentStep/maxSteps
+    let d = (currentStep - 1)/maxSteps
     let between = [];
     between[0] = a.x + d * (b.x - a.x);
     between[1] = a.y + d * (b.y - a.y);
