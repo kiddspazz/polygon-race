@@ -26,7 +26,7 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
 
   let polygons = new Array(16).fill(0);
 
-  function tick() {
+  const tick = () => {
     clearScreen()
 
     // TODO: Make this cleaner
@@ -49,7 +49,7 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     cartesianCtx.clearRect(0, 0, canvasConfig.width, canvasConfig.height);
   };
 
-  function drawPolygon(numberOfSides) {
+  const drawPolygon = (numberOfSides) => {
     cartesianCtx.beginPath();
     for (let currentSide = 0; currentSide <= numberOfSides; currentSide ++) {
       addSideToPath(currentSide, numberOfSides);
@@ -64,19 +64,19 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     cartesianCtx.lineTo(startPointOfSide, endPointOfSide);
   };
 
-  function findX(i, sides) {
+  const findX = (i, sides) => {
     let mult = (2 * i/sides)
     let answer = Math.round(100000 * Math.sin(mult * Math.PI))/100000;
     return CENTER.x + (answer * sideLength * sides/3);
   };
 
-  function findY(i, sides) {
+  const findY = (i, sides) => {
     let mult = (2 * i/sides);
     let answer = Math.round(100000 * Math.cos(mult * Math.PI))/100000;
     return CENTER.y + (answer * sideLength * sides/3);
   };
 
-  function drawDot(e, sides, currentStep) {
+  const drawDot = (e, sides, currentStep) => {
     let thisSideStart = Math.floor(e);
     let thisSideEnd = thisSideStart + 1;
     let a = [
@@ -96,7 +96,7 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     cartesianCtx.fill();
   }
 
-  function betweenPoint(a, b, currentStep) {
+  const betweenPoint = (a, b, currentStep) => {
     let d = currentStep/maxSteps
     let between = [];
     between[0] = a[0] + d * (b[0] - a[0]);
