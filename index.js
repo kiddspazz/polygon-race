@@ -38,15 +38,15 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
       drawDot(polygon, currentStep);
     });
 
-    if (currentStep === maxSteps) {
+    currentStep < maxSteps
+      ? currentStep ++
+      : currentStep = 1;
+
+    if (currentStep === 1) {
       polygons.forEach(polygon => {
         polygon.currentSide ++;
       });
     }
-
-    currentStep < maxSteps
-      ? currentStep ++
-      : currentStep = 1;
 
     window.requestAnimationFrame(tick);
   };
