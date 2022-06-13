@@ -7,7 +7,6 @@ const COLORS = [
   'rgb(0, 0, 255)',
   'rgb(127, 0, 255)'
 ];
-
 const CIRCUM = 2 * Math.PI;
 
 export const renderPolygonRaceInElement = (parentContainerId) => {
@@ -50,7 +49,7 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   };
 
   const drawPolygon = (numberOfSides) => {
-    cartesianCtx.strokeStyle = COLORS[(numberOfSides)%COLORS.length]
+    cartesianCtx.strokeStyle = COLORS[numberOfSides % COLORS.length]
 
     cartesianCtx.beginPath();
     for (let currentSide = 0; currentSide <= numberOfSides; currentSide ++) {
@@ -66,13 +65,13 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   };
 
   const findX = (currentSide, numberOfSides) => {
-    let mult = (2 * currentSide/numberOfSides)
+    let mult = 2 * currentSide/numberOfSides
     let answer = Math.sin(mult * Math.PI)
     return CENTER.x + (answer * sideLength * numberOfSides/3);
   };
 
   const findY = (currentSide, numberOfSides) => {
-    let mult = (2 * currentSide/numberOfSides);
+    let mult = 2 * currentSide/numberOfSides;
     let answer = Math.cos(mult * Math.PI);
     return CENTER.y + (answer * sideLength * numberOfSides/3);
   };
