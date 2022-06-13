@@ -22,22 +22,25 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   let sideLength = 29;
   let currentStep = 0;
 
-  let polygons = new Array(16).fill(0);
+  const polygons = [];
+  for (let numberOfSides = 3; numberOfSides < 16; numberOfSides++) {
+    polygons.push({
+      numberOfSides: numberOfSides,
+      currentStepAroundPolygon: 0,
+    });
+  }
 
   const tick = () => {
     clearScreen()
 
-    // TODO: Make this cleaner
-    polygons.forEach((e, numberOfSides) => {
-      if (!(numberOfSides < 3)) {
-        drawPolygon(numberOfSides);
-        drawDot(e/maxSteps, numberOfSides, currentStep);
-        polygons[numberOfSides] ++;
-        if (polygons[numberOfSides] === numberOfSides * maxSteps) {
-          polygons[numberOfSides] = 0;
-        }
+    polygons.forEach((polygon) => {
+      drawPolygon(polygon.numberOfSides);
+      drawDot(polygon.currentStepAroundPolygon/maxSteps, polygon.numberOfSides, currentStep);
+      polygon.currentStepAroundPolygon ++;
+      if (polygon.currentStepAroundPolygon === polygon.numberOfSides * maxSteps) {
+        polygon.currentStepAroundPolygon = 0;
       }
-    })
+    });
 
     currentStep + 1 !== maxSteps
       ? currentStep ++
