@@ -31,7 +31,7 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   let currentStep = 1;
 
   const tick = () => {
-    clearScreen();
+    clearScreen(cartesianCtx, canvasConfig);
 
     polygons.forEach(polygon => {
       drawPolygon(polygon.numberOfSides);
@@ -49,15 +49,6 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     }
 
     window.requestAnimationFrame(tick);
-  };
-
-  const clearScreen = () => {
-    cartesianCtx.clearRect(
-      -canvasConfig.width/2,
-      -canvasConfig.height/2,
-      canvasConfig.width,
-      canvasConfig.height,
-    );
   };
 
   const drawPolygon = (numberOfSides) => {
@@ -131,4 +122,13 @@ const getCartesianContext = (canvas) => {
   ctx.translate(canvas.width/2, canvas.height/2);
   ctx.scale(1, -1);
   return ctx;
+};
+
+const clearScreen = (context, config) => {
+  context.clearRect(
+    -config.width/2,
+    -config.height/2,
+    config.width,
+    config.height,
+  );
 };
