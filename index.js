@@ -71,13 +71,11 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   };
 
   const drawDot = (currentSide, numberOfSides, currentStep) => {
-    const thisSideStart = currentSide;
-    const thisSideEnd = thisSideStart + 1;
-    const a = getPoint(thisSideStart, numberOfSides)
-    const b = getPoint(thisSideEnd, numberOfSides)
-    const between = betweenPoint(a, b, currentStep);
+    const startPoint = getPoint(currentSide, numberOfSides)
+    const endPoint = getPoint(currentSide + 1, numberOfSides)
+    const dotPoint = betweenPoint(startPoint, endPoint, currentStep);
     cartesianCtx.beginPath();
-    cartesianCtx.arc(between.x, between.y, 7, 0, CIRCUM);
+    cartesianCtx.arc(dotPoint.x, dotPoint.y, 7, 0, CIRCUM);
     cartesianCtx.fillStyle = WHITE;
     cartesianCtx.fill();
   }
