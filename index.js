@@ -16,12 +16,12 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     width: 1200,
     parentContainerId: parentContainerId,
   };
-  const centerPoint = {x: canvasConfig.width/2, y: canvasConfig.height/2};
+  const CENTER = {x: canvasConfig.width/2, y: canvasConfig.height/2};
   const maxSteps = 12;
 
   const cartesianCtx = setUpCanvasContext(canvasConfig)
 
-  let u = 80;
+  let sideLength = 80;
   let currentStep = 0;
 
   let polygons = new Array(16).fill(0);
@@ -36,9 +36,10 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
         if (a[idx] === idx * maxSteps) {a[idx] = 0}
       }
     })
-    currentStep ++;
-    if (currentStep === maxSteps) {currentStep = 0}
-    window.requestAnimationFrame(tick);
+    currentStep + 1 !== maxSteps
+      ? currentStep ++
+      : currentStep = 0;
+    window.requestAnimationFrame(tick)
   };
 
   const clearScreen = () => {
@@ -56,8 +57,8 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   function draw(sides) {
     cartesianCtx.beginPath();
     for (let i = 0; i <= sides; i ++) {
-      let x = centerPoint.x + findX(i, sides) * sides/3;
-      let y = centerPoint.y + findY(i, sides) * sides/3;
+      let x = CENTER.x + findX(i, sides) * sides/3;
+      let y = CENTER.y + findY(i, sides) * sides/3;
       cartesianCtx.lineTo(x, y);
     };
     cartesianCtx.strokeStyle = COLORS[(sides)%COLORS.length] //(sides+cycle)%COLORS.length
@@ -68,25 +69,25 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   function findX(i, sides) {
     let mult = (2 * i/sides)
     let answer = Math.round(100000 * Math.sin(mult * Math.PI))/100000;
-    return answer * u;
+    return answer * sideLength;
   };
 
   function findY(i, sides) {
     let mult = (2 * i/sides);
     let answer = Math.round(100000 * Math.cos(mult * Math.PI))/100000;
-    return answer * u;
+    return answer * sideLength;
   };
 
   function drawDot(e, sides, currentStep) {
     let thisSideStart = Math.floor(e);
     let thisSideEnd = thisSideStart + 1;
     let a = [
-      centerPoint.x + findX(thisSideStart, sides) * sides/3,
-      centerPoint.y + findY(thisSideStart, sides) * sides/3
+      CENTER.x + findX(thisSideStart, sides) * sides/3,
+      CENTER.y + findY(thisSideStart, sides) * sides/3
     ];
     let b = [
-      centerPoint.x + findX(thisSideEnd, sides) * sides/3,
-      centerPoint.y + findY(thisSideEnd, sides) * sides/3
+      CENTER.x + findX(thisSideEnd, sides) * sides/3,
+      CENTER.y + findY(thisSideEnd, sides) * sides/3
     ];
     if (sides === 3) {
     };
