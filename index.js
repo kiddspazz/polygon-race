@@ -65,16 +65,16 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     cartesianCtx.lineTo(startPointOfSide, endPointOfSide);
   };
 
-  const findX = (i, sides) => {
-    let mult = (2 * i/sides)
+  const findX = (currentSide, numberOfSides) => {
+    let mult = (2 * currentSide/numberOfSides)
     let answer = Math.sin(mult * Math.PI)
-    return CENTER.x + (answer * sideLength * sides/3);
+    return CENTER.x + (answer * sideLength * numberOfSides/3);
   };
 
-  const findY = (i, sides) => {
-    let mult = (2 * i/sides);
+  const findY = (currentSide, numberOfSides) => {
+    let mult = (2 * currentSide/numberOfSides);
     let answer = Math.cos(mult * Math.PI);
-    return CENTER.y + (answer * sideLength * sides/3);
+    return CENTER.y + (answer * sideLength * numberOfSides/3);
   };
 
   const drawDot = (e, sides, currentStep) => {
