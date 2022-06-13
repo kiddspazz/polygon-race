@@ -86,13 +86,14 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
 
   const getPoint = (currentSide, numberOfSides) => {
     const howFarAroundTheCircle = 2 * currentSide/numberOfSides;
+
     const unitCircleX = Math.sin(howFarAroundTheCircle * Math.PI);
-    const sameDiameterCircleX = unitCircleX * sideLength;
-    const sizedByNumberOfSidesCircleX = sameDiameterCircleX * numberOfSides;
+    const sideLengthDiameterCircleX = unitCircleX * sideLength;
+    const sizedByNumberOfSidesCircleX = sideLengthDiameterCircleX * numberOfSides;
 
     const unitCircleY = Math.cos(howFarAroundTheCircle * Math.PI);
-    const sameDiameterCircleY = unitCircleY * sideLength;
-    const sizedByNumberOfSidesCircleY = sameDiameterCircleY * numberOfSides;
+    const sideLengthDiameterCircleY = unitCircleY * sideLength;
+    const sizedByNumberOfSidesCircleY = sideLengthDiameterCircleY * numberOfSides;
 
     return {x: sizedByNumberOfSidesCircleX, y: sizedByNumberOfSidesCircleY};
   };
