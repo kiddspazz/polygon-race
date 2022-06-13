@@ -52,8 +52,8 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   function drawPolygon(numberOfSides) {
     cartesianCtx.beginPath();
     for (let currentSide = 0; currentSide <= numberOfSides; currentSide ++) {
-      let x = CENTER.x + findX(currentSide, numberOfSides);
-      let y = CENTER.y + findY(currentSide, numberOfSides);
+      let x = findX(currentSide, numberOfSides);
+      let y = findY(currentSide, numberOfSides);
       cartesianCtx.lineTo(x, y);
     };
     cartesianCtx.strokeStyle = COLORS[(numberOfSides)%COLORS.length]
@@ -63,25 +63,25 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   function findX(i, sides) {
     let mult = (2 * i/sides)
     let answer = Math.round(100000 * Math.sin(mult * Math.PI))/100000;
-    return answer * sideLength * sides/3;
+    return CENTER.x + (answer * sideLength * sides/3);
   };
 
   function findY(i, sides) {
     let mult = (2 * i/sides);
     let answer = Math.round(100000 * Math.cos(mult * Math.PI))/100000;
-    return answer * sideLength * sides/3;
+    return CENTER.y + (answer * sideLength * sides/3);
   };
 
   function drawDot(e, sides, currentStep) {
     let thisSideStart = Math.floor(e);
     let thisSideEnd = thisSideStart + 1;
     let a = [
-      CENTER.x + findX(thisSideStart, sides),
-      CENTER.y + findY(thisSideStart, sides)
+      findX(thisSideStart, sides),
+      findY(thisSideStart, sides)
     ];
     let b = [
-      CENTER.x + findX(thisSideEnd, sides),
-      CENTER.y + findY(thisSideEnd, sides)
+      findX(thisSideEnd, sides),
+      findY(thisSideEnd, sides)
     ];
     if (sides === 3) {
     };
