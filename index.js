@@ -26,23 +26,25 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   for (let numberOfSides = 3; numberOfSides < 16; numberOfSides++) {
     polygons.push({
       numberOfSides: numberOfSides,
-      currentStepAroundPolygon: 0,
+      currentSide: 0,
     });
   }
 
   const tick = () => {
     clearScreen()
 
-    polygons.forEach((polygon) => {
+    polygons.forEach(polygon => {
       drawPolygon(polygon.numberOfSides);
-      drawDot(polygon.currentStepAroundPolygon/maxSteps, polygon.numberOfSides, currentStep);
-      polygon.currentStepAroundPolygon ++;
-      if (polygon.currentStepAroundPolygon === polygon.numberOfSides * maxSteps) {
-        polygon.currentStepAroundPolygon = 0;
-      }
+      drawDot(polygon.currentSide, polygon.numberOfSides, currentStep);
     });
 
-    currentStep + 1 !== maxSteps
+    if (currentStep + 1 === maxSteps) {
+      polygons.forEach(polygon => {
+        polygon.currentSide ++;
+      });
+    }
+
+    currentStep + 1 < maxSteps
       ? currentStep ++
       : currentStep = 0;
     window.requestAnimationFrame(tick)
@@ -67,8 +69,8 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     cartesianCtx.stroke();
   };
 
-  const drawDot = (e, numberOfSides, currentStep) => {
-    let thisSideStart = Math.floor(e);
+  const drawDot = (currentSide, numberOfSides, currentStep) => {
+    let thisSideStart = currentSide;
     let thisSideEnd = thisSideStart + 1;
     let a = getPoint(thisSideStart, numberOfSides)
     let b = getPoint(thisSideEnd, numberOfSides)
