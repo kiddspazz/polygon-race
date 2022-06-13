@@ -98,8 +98,8 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     return {x: sizedByNumberOfSidesCircleX, y: sizedByNumberOfSidesCircleY};
   };
 
-  const getBetweenPoint = (a, b, steps) => {
-    let distanceAlongLine = (steps - 1)/maxSteps
+  const getBetweenPoint = (a, b, currentStep) => {
+    let distanceAlongLine = (currentStep - 1)/maxSteps
     let between = {
       x: a.x + distanceAlongLine * (b.x - a.x),
       y: a.y + distanceAlongLine * (b.y - a.y),
