@@ -10,6 +10,7 @@ const COLORS = [
 const WHITE = 'rgb(255, 255, 255)';
 const CIRCUM = 2 * Math.PI;
 const SIDE_LENGTH = 29;
+const MAX_STEPS = 12;
 
 export const renderPolygonRaceInElement = (parentContainerId) => {
   const canvasConfig = {
@@ -17,7 +18,6 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     width: 1200,
     parentContainerId: parentContainerId,
   };
-  const maxSteps = 12;
   const cartesianCtx = setUpCanvasContext(canvasConfig);
 
   const polygons = [];
@@ -35,10 +35,10 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
 
     polygons.forEach(polygon => {
       drawPolygon(polygon.numberOfSides, cartesianCtx);
-      drawDot(polygon, currentStep);
+      drawDot(polygon, currentStep, cartesianCtx);
     });
 
-    currentStep < maxSteps
+    currentStep < MAX_STEPS
       ? currentStep ++
       : currentStep = 1;
 
@@ -50,25 +50,6 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
 
     window.requestAnimationFrame(tick);
   };
-
-  const drawDot = (polygon, currentStep) => {
-    const startPoint = getPoint(polygon.currentSide, polygon.numberOfSides)
-    const endPoint = getPoint(polygon.currentSide + 1, polygon.numberOfSides)
-    const dotPoint = getBetweenPoint(startPoint, endPoint, currentStep);
-    cartesianCtx.beginPath();
-    cartesianCtx.arc(dotPoint.x, dotPoint.y, 7, 0, CIRCUM);
-    cartesianCtx.fillStyle = WHITE;
-    cartesianCtx.fill();
-  }
-
-  const getBetweenPoint = (a, b, currentStep) => {
-    let distanceAlongLine = (currentStep - 1)/maxSteps
-    let between = {
-      x: a.x + distanceAlongLine * (b.x - a.x),
-      y: a.y + distanceAlongLine * (b.y - a.y),
-    };
-    return between;
-  }
 
   window.requestAnimationFrame(tick);
 }
@@ -132,3 +113,22 @@ const getPoint = (currentSide, numberOfSides) => {
 
   return {x: sizedByNumberOfSidesCircleX, y: sizedByNumberOfSidesCircleY};
 };
+
+const drawDot = (polygon, currentStep, context) => {
+  const startPoint = getPoint(polygon.currentSide, polygon.numberOfSides)
+  const endPoint = getPoint(polygon.currentSide + 1, polygon.numberOfSides)
+  const dotPoint = getBetweenPoint(startPoint, endPoint, currentStep);
+  context.beginPath();
+  context.arc(dotPoint.x, dotPoint.y, 7, 0, CIRCUM);
+  context.fillStyle = WHITE;
+  context.fill();
+}
+
+const getBetweenPoint = (a, b, currentStep) => {
+  let distanceAlongLine = (currentStep - 1)/MAX_STEPS
+  let between = {
+    x: a.x + distanceAlongLine * (b.x - a.x),
+    y: a.y + distanceAlongLine * (b.y - a.y),
+  };
+  return between;
+}
