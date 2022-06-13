@@ -35,7 +35,7 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
 
     polygons.forEach(polygon => {
       drawPolygon(polygon.numberOfSides);
-      drawDot(polygon.currentSide, polygon.numberOfSides, currentStep);
+      drawDot(polygon, currentStep);
     });
 
     if (currentStep === maxSteps) {
@@ -69,9 +69,9 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     cartesianCtx.stroke();
   };
 
-  const drawDot = (currentSide, numberOfSides, currentStep) => {
-    const startPoint = getPoint(currentSide, numberOfSides)
-    const endPoint = getPoint(currentSide + 1, numberOfSides)
+  const drawDot = (polygon, currentStep) => {
+    const startPoint = getPoint(polygon.currentSide, polygon.numberOfSides)
+    const endPoint = getPoint(polygon.currentSide + 1, polygon.numberOfSides)
     const dotPoint = getBetweenPoint(startPoint, endPoint, currentStep);
     cartesianCtx.beginPath();
     cartesianCtx.arc(dotPoint.x, dotPoint.y, 7, 0, CIRCUM);
