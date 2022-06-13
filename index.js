@@ -28,14 +28,17 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
 
   function tick() {
     clearScreen()
+
+    // TODO: Make this cleaner
     polygons.forEach((e, idx, a) => {
       if (!(idx < 3)) {
-        draw(idx);
+        drawPolygon(idx);
         drawDot(e/maxSteps, idx, currentStep);
         a[idx] ++;
         if (a[idx] === idx * maxSteps) {a[idx] = 0}
       }
     })
+
     currentStep + 1 !== maxSteps
       ? currentStep ++
       : currentStep = 0;
@@ -46,24 +49,15 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     cartesianCtx.clearRect(0, 0, canvasConfig.width, canvasConfig.height);
   };
 
-  function betweenPoint(a, b, currentStep) {
-    let d = currentStep/maxSteps
-    let between = [];
-    between[0] = a[0] + d * (b[0] - a[0]);
-    between[1] = a[1] + d * (b[1] - a[1]);
-    return between;
-  }
-
-  function draw(sides) {
+  function drawPolygon(numberOfSides) {
     cartesianCtx.beginPath();
-    for (let i = 0; i <= sides; i ++) {
-      let x = CENTER.x + findX(i, sides) * sides/3;
-      let y = CENTER.y + findY(i, sides) * sides/3;
+    for (let currentSide = 0; currentSide <= numberOfSides; currentSide ++) {
+      let x = CENTER.x + findX(currentSide, numberOfSides) * numberOfSides/3;
+      let y = CENTER.y + findY(currentSide, numberOfSides) * numberOfSides/3;
       cartesianCtx.lineTo(x, y);
     };
-    cartesianCtx.strokeStyle = COLORS[(sides)%COLORS.length] //(sides+cycle)%COLORS.length
+    cartesianCtx.strokeStyle = COLORS[(numberOfSides)%COLORS.length]
     cartesianCtx.stroke();
-
   };
 
   function findX(i, sides) {
@@ -96,6 +90,14 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
     cartesianCtx.arc(between[0], between[1], 7, 0, CIRCUM);
     cartesianCtx.fillStyle = 'rgb(255,255,255)';
     cartesianCtx.fill();
+  }
+
+  function betweenPoint(a, b, currentStep) {
+    let d = currentStep/maxSteps
+    let between = [];
+    between[0] = a[0] + d * (b[0] - a[0]);
+    between[1] = a[1] + d * (b[1] - a[1]);
+    return between;
   }
 
   window.requestAnimationFrame(tick);
