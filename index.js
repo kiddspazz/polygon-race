@@ -12,7 +12,86 @@ const CIRCUM = 2 * Math.PI;
 const SIDE_LENGTH = 29;
 const MAX_STEPS = 12;
 
-export const renderPolygonRaceInElement = (parentContainerId) => {
+const getCartesianContext = (canvas) => {
+  const ctx = canvas.getContext('2d');
+  ctx.translate(canvas.width / 2, canvas.height / 2);
+  ctx.scale(1, -1);
+  return ctx;
+};
+
+const addCanvasToElement = (canvas, elementId) => {
+  const parentContainer = document.getElementById(elementId);
+  parentContainer.append(canvas);
+};
+
+const setUpCanvasContext = (config) => {
+  const canvas = document.createElement('canvas');
+  canvas.width = config.width;
+  canvas.height = config.height;
+
+  addCanvasToElement(canvas, config.parentContainerId);
+  const cartesianCtx = getCartesianContext(canvas);
+  cartesianCtx.lineWidth = 3;
+  return cartesianCtx;
+};
+
+const clearScreen = (context, config) => {
+  context.clearRect(
+    -config.width / 2,
+    -config.height / 2,
+    config.width,
+    config.height,
+  );
+};
+
+const getPoint = (currentSide, numberOfSides) => {
+  const howFarAroundTheCircle = (2 * currentSide) / numberOfSides;
+
+  const unitCircleX = Math.sin(howFarAroundTheCircle * Math.PI);
+  const sideLengthDiameterCircleX = unitCircleX * SIDE_LENGTH;
+  const sizedByNumberOfSidesCircleX = sideLengthDiameterCircleX * numberOfSides;
+
+  const unitCircleY = Math.cos(howFarAroundTheCircle * Math.PI);
+  const sideLengthDiameterCircleY = unitCircleY * SIDE_LENGTH;
+  const sizedByNumberOfSidesCircleY = sideLengthDiameterCircleY * numberOfSides;
+
+  return { x: sizedByNumberOfSidesCircleX, y: sizedByNumberOfSidesCircleY };
+};
+
+const getBetweenPoint = (a, b, currentStep) => {
+  const distanceAlongLine = (currentStep - 1) / MAX_STEPS;
+  const between = {
+    x: a.x + distanceAlongLine * (b.x - a.x),
+    y: a.y + distanceAlongLine * (b.y - a.y),
+  };
+  return between;
+};
+
+const drawDot = (polygon, currentStep, context) => {
+  const startPoint = getPoint(polygon.currentSide, polygon.numberOfSides);
+  const endPoint = getPoint(polygon.currentSide + 1, polygon.numberOfSides);
+  const dotPoint = getBetweenPoint(startPoint, endPoint, currentStep);
+  context.beginPath();
+  context.arc(dotPoint.x, dotPoint.y, 7, 0, CIRCUM);
+  context.fillStyle = WHITE;
+  context.fill();
+};
+
+const addSideToDrawPath = (currentSide, numberOfSides, context) => {
+  const point = getPoint(currentSide, numberOfSides);
+  context.lineTo(point.x, point.y);
+};
+
+const drawPolygon = (numberOfSides, context) => {
+  context.strokeStyle = COLORS[numberOfSides % COLORS.length];
+  context.beginPath();
+  for (let currentSide = 0; currentSide <= numberOfSides; currentSide += 1) {
+    addSideToDrawPath(currentSide, numberOfSides, context);
+  }
+  context.stroke();
+};
+
+const renderPolygonRaceInElement = (parentContainerId) => {
   const canvasConfig = {
     height: 900,
     width: 1200,
@@ -21,7 +100,7 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   const cartesianCtx = setUpCanvasContext(canvasConfig);
 
   const polygons = [];
-  for (let numberOfSides = 3; numberOfSides < 16; numberOfSides++) {
+  for (let numberOfSides = 3; numberOfSides < 16; numberOfSides += 1) {
     polygons.push({
       numberOfSides,
       currentSide: 0,
@@ -38,13 +117,15 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
       drawDot(polygon, currentStep, cartesianCtx);
     });
 
-    currentStep < MAX_STEPS
-      ? currentStep++
-      : currentStep = 1;
+    if (currentStep < MAX_STEPS) {
+      currentStep += 1;
+    } else {
+      currentStep = 1;
+    }
 
     if (currentStep === 1) {
-      polygons.forEach((polygon) => {
-        polygon.currentSide++;
+      polygons.forEach((_, i) => {
+        polygons[i].currentSide += 1;
       });
     }
 
@@ -54,81 +135,4 @@ export const renderPolygonRaceInElement = (parentContainerId) => {
   window.requestAnimationFrame(tick);
 };
 
-const setUpCanvasContext = (config) => {
-  const canvas = document.createElement('canvas');
-  canvas.width = config.width;
-  canvas.height = config.height;
-
-  addCanvasToElement(canvas, config.parentContainerId);
-  const cartesianCtx = getCartesianContext(canvas);
-  cartesianCtx.lineWidth = 3;
-  return cartesianCtx;
-};
-
-const addCanvasToElement = (canvas, elementId) => {
-  const parentContainer = document.getElementById(elementId);
-  parentContainer.append(canvas);
-};
-
-const getCartesianContext = (canvas) => {
-  const ctx = canvas.getContext('2d');
-  ctx.translate(canvas.width / 2, canvas.height / 2);
-  ctx.scale(1, -1);
-  return ctx;
-};
-
-const clearScreen = (context, config) => {
-  context.clearRect(
-    -config.width / 2,
-    -config.height / 2,
-    config.width,
-    config.height,
-  );
-};
-
-const drawPolygon = (numberOfSides, context) => {
-  context.strokeStyle = COLORS[numberOfSides % COLORS.length];
-  context.beginPath();
-  for (let currentSide = 0; currentSide <= numberOfSides; currentSide++) {
-    addSideToDrawPath(currentSide, numberOfSides, context);
-  }
-  context.stroke();
-};
-
-const addSideToDrawPath = (currentSide, numberOfSides, context) => {
-  const point = getPoint(currentSide, numberOfSides);
-  context.lineTo(point.x, point.y);
-};
-
-const getPoint = (currentSide, numberOfSides) => {
-  const howFarAroundTheCircle = 2 * currentSide / numberOfSides;
-
-  const unitCircleX = Math.sin(howFarAroundTheCircle * Math.PI);
-  const sideLengthDiameterCircleX = unitCircleX * SIDE_LENGTH;
-  const sizedByNumberOfSidesCircleX = sideLengthDiameterCircleX * numberOfSides;
-
-  const unitCircleY = Math.cos(howFarAroundTheCircle * Math.PI);
-  const sideLengthDiameterCircleY = unitCircleY * SIDE_LENGTH;
-  const sizedByNumberOfSidesCircleY = sideLengthDiameterCircleY * numberOfSides;
-
-  return { x: sizedByNumberOfSidesCircleX, y: sizedByNumberOfSidesCircleY };
-};
-
-const drawDot = (polygon, currentStep, context) => {
-  const startPoint = getPoint(polygon.currentSide, polygon.numberOfSides);
-  const endPoint = getPoint(polygon.currentSide + 1, polygon.numberOfSides);
-  const dotPoint = getBetweenPoint(startPoint, endPoint, currentStep);
-  context.beginPath();
-  context.arc(dotPoint.x, dotPoint.y, 7, 0, CIRCUM);
-  context.fillStyle = WHITE;
-  context.fill();
-};
-
-const getBetweenPoint = (a, b, currentStep) => {
-  const distanceAlongLine = (currentStep - 1) / MAX_STEPS;
-  const between = {
-    x: a.x + distanceAlongLine * (b.x - a.x),
-    y: a.y + distanceAlongLine * (b.y - a.y),
-  };
-  return between;
-};
+export default renderPolygonRaceInElement;
